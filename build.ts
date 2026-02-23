@@ -19,11 +19,11 @@ if (existsSync(refHtmlCached)) {
 }
 const refDocQuery = load(refHtml);
 const table = refDocQuery("table.ref_table").eq(0);
-table.append(refDocQuery("table.ref_table").eq(1).children().not('thead'));
+table.append(refDocQuery("table.ref_table").eq(1).children().not("thead"));
 
 const template = (await readFile("index.html")).toString();
 const out = load(template);
-out("#ref").append(table);
+out("#ref").replaceWith(table);
 
 const outPath = "build/index.html";
 await writeFile(outPath, out.html());

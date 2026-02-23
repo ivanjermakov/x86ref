@@ -2,7 +2,7 @@
 
 /**
  * @typedef Op
- * @property element {Element}
+ * @property element {HTMLTableRowElement}
  * @property mnemonic {string}
  * @property op1? {string}
  * @property op2? {string}
@@ -31,7 +31,6 @@ const applyFilter = (query) => {
 		const show = filter(op, query);
 		op.element.style.visibility = show ? "visible" : "collapse";
 	}
-	// document.getElementById('table1').offsetHeight;
 };
 
 document.querySelectorAll("tbody tr").forEach((e) => {
@@ -45,7 +44,7 @@ document.querySelectorAll("tbody tr").forEach((e) => {
 		op2: e.children[startIdx + 2].innerText,
 	};
 	if (op.mnemonic === "") {
-        op.element.parentElement.remove()
+		op.element.parentElement.remove();
 		return;
 	}
 	ops.push(op);
