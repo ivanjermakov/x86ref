@@ -1,0 +1,66 @@
+:root {
+    --bg: #ffffff;
+    --bg2: #f4f4f4;
+    --bg3: #dddddd;
+    --fg: #000000;
+    --fg2: #111111;
+    --fg3: #444444;
+    --special: #c955e7;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #111111;
+        --bg2: #222222;
+        --bg3: #444444;
+        --fg: #ffffff;
+        --fg2: #eeeeee;
+        --fg3: #aaaaaa;
+    }
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--fg);
+}
+
+html {
+    font-size: 16px;
+    overscroll-behavior: none;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+* {
+    font-family: 'Space Mono', monospace;
+    font-variant-ligatures: none;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--bg3);
+}
+
+a {
+    color: var(--fg);
+
+    &:hover {
+        color: var(--special);
+
+        i {
+            color: var(--special);
+        }
+    }
+}
+
+table {
+    border-collapse: collapse;
+
+    table, th, td {
+        border: 1px solid var(--bg3);
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "x86ref",
+    "version": "0.0.1",
+    "type": "module",
+    "devDependencies": {
+        "@types/node": "24.5.2"
+    },
+    "dependencies": {
+        "cheerio": "1.2.0"
+    }
+}
