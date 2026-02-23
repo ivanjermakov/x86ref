@@ -25,7 +25,7 @@ body {
 }
 
 html {
-    font-size: 16px;
+    font-size: 14px;
     overscroll-behavior: none;
 }
 
@@ -57,10 +57,27 @@ a {
     }
 }
 
+*:focus {
+    outline: 1px solid var(--special);
+}
+
+input {
+    background-color: var(--bg2);
+    color: var(--fg);
+    border-width: 1px;
+    width: 100%;
+    margin: 1px;
+}
+
 table {
     border-collapse: collapse;
+    width: 100%;
 
     table, th, td {
         border: 1px solid var(--bg3);
+    }
+
+    td {
+        text-wrap: nowrap;
     }
 }
