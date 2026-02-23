@@ -43,6 +43,7 @@ body,
     border-width: 0;
     border-style: solid;
     border-color: var(--bg3);
+    box-sizing: border-box;
 }
 
 a {
@@ -66,18 +67,34 @@ input {
     color: var(--fg);
     border-width: 1px;
     width: 100%;
-    margin: 1px;
+}
+
+header {
+    display: flex;
+    position: sticky;
+    top: 0;
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
+    overflow: hidden;
 
     table, th, td {
         border: 1px solid var(--bg3);
     }
 
-    td {
+    th, td {
         text-wrap: nowrap;
+        white-space: nowrap;
     }
+
+    .highlight {
+        background-color: var(--bg2);
+    }
+
+    tr > td > i {
+        display: none;
+    }
+}
+
+main {
 }
