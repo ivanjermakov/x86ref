@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { load } from "cheerio";
 import { cp, mkdir, readFile, writeFile } from "fs/promises";
@@ -28,4 +29,7 @@ out("#ref").replaceWith(table);
 const outPath = "build/index.html";
 await writeFile(outPath, out.html());
 
-await Promise.all(["index.js", "index.css"].map((f) => cp(f, `build/${f}`)));
+await cp("index.css", "build/index.css");
+
+const command = `tsc index.ts --outDir build`;
+execSync(command, { stdio: "inherit" });
