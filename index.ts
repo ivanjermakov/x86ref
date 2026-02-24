@@ -8,10 +8,32 @@ type Op = {
 const ops: Op[] = [];
 
 const filter = (op: Op, query: string): boolean => {
+	const opOk = (o: string | undefined, q: string | undefined) => {
+		if (!q) return true;
+		if (q === "_") return true;
+		if (!o) return false;
+		switch (q) {
+			case "_":
+				return true;
+			case "r":
+				return o.startsWith("r");
+			case "m":
+				return o.startsWith("m") || o.startsWith("r/m");
+			case "i":
+				return o.startsWith("i");
+			default:
+				return o.startsWith(q);
+		}
+	};
 	if (query !== "" && (op.mnemonic == "invalid" || op.mnemonic == "null"))
 		return false;
 	const m = query.split(" ")[0];
-	return op.mnemonic.toLowerCase().includes(m.toLowerCase());
+	const op1 = query.split(" ").at(1);
+	const op2 = query.split(" ").at(2);
+	const mnemOk = op.mnemonic.toLowerCase().includes(m.toLowerCase());
+	const op1Ok = opOk(op.op1, op1);
+	const op2Ok = opOk(op.op2, op2);
+	return mnemOk && op1Ok && op2Ok;
 };
 
 const applyFilter = (query: string) => {
