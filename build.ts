@@ -31,5 +31,5 @@ await writeFile(outPath, out.html());
 
 await cp("index.css", "build/index.css");
 
-const command = `tsc index.ts --outDir build`;
+const command = `tsc --target esnext --moduleResolution node index.ts --outDir build`;
 execSync(command, { stdio: "inherit" });

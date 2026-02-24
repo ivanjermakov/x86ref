@@ -1,3 +1,11 @@
+export type {};
+
+declare global {
+	interface Array<T> {
+		at(index: number): T | undefined;
+	}
+}
+
 type Op = {
 	element: HTMLTableRowElement;
 	mnemonic: string;
@@ -6,6 +14,14 @@ type Op = {
 };
 
 const ops: Op[] = [];
+
+const debounce = (f: (...args: any[]) => void, delay: number) => {
+	let timeout: ReturnType<typeof setTimeout>;
+	return (...args: any[]) => {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => f(...args), delay);
+	};
+};
 
 const filter = (op: Op, query: string): boolean => {
 	const opOk = (o: string | undefined, q: string | undefined) => {
@@ -60,6 +76,9 @@ document.querySelectorAll("tbody tr").forEach((e) => {
 });
 console.debug(ops);
 
-document.getElementById("filter")!.addEventListener("input", (e) => {
-	applyFilter((e.target as HTMLInputElement).value);
-});
+document.getElementById("filter")!.addEventListener(
+	"input",
+	debounce((e) => {
+		applyFilter((e.target as HTMLInputElement).value);
+	}, 20),
+);
