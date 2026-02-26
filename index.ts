@@ -60,16 +60,14 @@ const applyFilter = (query: string) => {
 };
 
 document.querySelectorAll("tbody tr").forEach((e) => {
-	const full = e.children.length > 5;
-	const startIdx = full ? 10 : 0;
 	const op = {
 		element: e as HTMLTableRowElement,
-		mnemonic: (e.children[startIdx] as HTMLElement).innerText,
-		op1: (e.children[startIdx + 1] as HTMLElement).innerText,
-		op2: (e.children[startIdx + 2] as HTMLElement).innerText,
+		mnemonic: (e.children[10] as HTMLElement).innerText,
+		op1: (e.children[11] as HTMLElement).innerText,
+		op2: (e.children[12] as HTMLElement).innerText,
 	};
 	if (op.mnemonic === "") {
-		op.element.parentElement!.remove();
+		op.element.remove();
 		return;
 	}
 	ops.push(op);

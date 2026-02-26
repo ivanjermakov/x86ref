@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { load } from "cheerio";
+import type { Element } from "domhandler";
 import { cp, mkdir, readFile, writeFile } from "fs/promises";
 
 await mkdir("build", { recursive: true });
@@ -18,18 +19,44 @@ if (existsSync(refHtmlCached)) {
 	refHtml = new TextDecoder("ISO-8859-1").decode(res);
 	await writeFile(refHtmlCached, refHtml);
 }
-const refDocQuery = load(refHtml);
-const table = refDocQuery("table.ref_table").eq(0);
-table.append(refDocQuery("table.ref_table").eq(1).children().not("thead"));
+const ref = load(refHtml);
+const header = ref("table.ref_table thead").eq(0);
 
 const template = (await readFile("index.html")).toString();
 const out = load(template);
-out("#ref").replaceWith(table);
+const outTable = out("#ref");
+outTable.append(header);
+
+const tbody = out("<tbody>");
+const rows = ref(".ref_table tbody");
+for (const row of rows) {
+	let firstTr: Element;
+	for (const tr of ref(row).find("tr")) {
+		firstTr ??= tr;
+		ref(tr)
+			.find("td")
+			.each((_, td) => {
+				delete td.attribs.rowspan;
+				return true;
+			});
+		if (tr.attribs.class === "nbb") {
+			const newTr = ref("<tr>");
+			const tds = out(firstTr).find("td").clone();
+			newTr.append(tds.slice(0, 10));
+			newTr.append(tr.children);
+			newTr.append(tds.slice(15));
+			tbody.append(newTr);
+		} else {
+			tbody.append(tr);
+		}
+	}
+}
+outTable.append(tbody);
 
 const outPath = "build/index.html";
 await writeFile(outPath, out.html());
 
 await cp("index.css", "build/index.css");
 
-const command = `tsc --target esnext --moduleResolution node index.ts --outDir build`;
+const command = `tsgo --target esnext --moduleResolution node index.ts --outDir build`;
 execSync(command, { stdio: "inherit" });
