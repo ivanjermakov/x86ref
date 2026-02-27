@@ -1,8 +1,11 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
-import { load } from "cheerio";
+import { type Cheerio, load } from "cheerio";
 import type { Element } from "domhandler";
 import { cp, mkdir, readFile, writeFile } from "fs/promises";
+
+// biome-ignore format:
+const jccMnemonics = ["JA", "JAE", "JB", "JBE", "JC", "JCXZ", "JECXZ", "JRCXZ", "JE", "JG", "JGE", "JL", "JLE", "JNA", "JNAE", "JNB", "JNBE", "JNC", "JNE", "JNG", "JNGE", "JNL", "JNLE", "JNO", "JNP", "JNS", "JNZ", "JO", "JP", "JPE", "JPO", "JS", "JZ", "JA", "JAE", "JB", "JBE", "JC", "JE", "JZ", "JG", "JGE", "JL", "JLE", "JNA", "JNAE", "JNB", "JNBE", "JNC", "JNE", "JNG", "JNGE", "JNL", "JNLE", "JNO", "JNP", "JNS", "JNZ", "JO", "JP", "JPE", "JPO", "JS", "JZ"];
 
 await mkdir("build", { recursive: true });
 await mkdir("cache", { recursive: true });
@@ -39,8 +42,9 @@ for (const row of rows) {
 				delete td.attribs.rowspan;
 				return true;
 			});
+		let newTr: Cheerio<any> = ref(tr);
 		if (tr.attribs.class === "nbb") {
-			const newTr = ref("<tr>");
+			newTr = ref("<tr>");
 			const tds = out(firstTr).find("td").clone();
 			newTr.append(tds.slice(0, 10));
 			newTr.append(tr.children);
@@ -48,6 +52,20 @@ for (const row of rows) {
 			tbody.append(newTr);
 		} else {
 			tbody.append(tr);
+		}
+		const nameTd = ref(ref(newTr).find("td")[10]);
+		const mnemonic = nameTd.text();
+		if (
+			mnemonic !== "" &&
+			mnemonic !== "invalid" &&
+			mnemonic !== "no mnemonic"
+		) {
+			const fcMnem = jccMnemonics.includes(mnemonic)
+				? "jcc"
+				: mnemonic.toLowerCase();
+			nameTd.html(
+				`<td><a href="https://www.felixcloutier.com/x86/${fcMnem}">${mnemonic}</a></td>`,
+			);
 		}
 	}
 }
