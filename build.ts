@@ -53,8 +53,10 @@ for (const row of rows) {
 		} else {
 			tbody.append(tr);
 		}
-		const nameTd = ref(ref(newTr).find("td")[10]);
-		const mnemonic = nameTd.text();
+		const mnemonicIdx =
+			ref(newTr).find("td")[2].attribs.colspan === "2" ? 9 : 10;
+		const mnemonicTd = ref(ref(newTr).find("td")[mnemonicIdx]);
+		const mnemonic = mnemonicTd.text();
 		if (
 			mnemonic !== "" &&
 			mnemonic !== "invalid" &&
@@ -63,7 +65,7 @@ for (const row of rows) {
 			const fcMnem = jccMnemonics.includes(mnemonic)
 				? "jcc"
 				: mnemonic.toLowerCase();
-			nameTd.html(
+			mnemonicTd.html(
 				`<td><a href="https://www.felixcloutier.com/x86/${fcMnem}">${mnemonic}</a></td>`,
 			);
 		}

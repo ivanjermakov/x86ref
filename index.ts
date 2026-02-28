@@ -60,11 +60,13 @@ const applyFilter = (query: string) => {
 };
 
 document.querySelectorAll("tbody tr").forEach((e) => {
+	const mnemonicIdx =
+		e.children[2].attributes.getNamedItem("colspan")?.value === "2" ? 9 : 10;
 	const op = {
 		element: e as HTMLTableRowElement,
-		mnemonic: (e.children[10] as HTMLElement).innerText,
-		op1: (e.children[11] as HTMLElement).innerText,
-		op2: (e.children[12] as HTMLElement).innerText,
+		mnemonic: (e.children[mnemonicIdx] as HTMLElement).innerText,
+		op1: (e.children[mnemonicIdx + 1] as HTMLElement).innerText,
+		op2: (e.children[mnemonicIdx + 2] as HTMLElement).innerText,
 	};
 	if (op.mnemonic === "") {
 		op.element.remove();
